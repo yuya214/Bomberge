@@ -16,7 +16,6 @@ var Enemy = enchant.Class.create(enchant.Sprite, {
 		this.image = game.assets[CHARA_IMAGE_NAME];	// 画像をセット
         this.x = x;
         this.y = y;
-        var Enemy_spd   = 1;
         game.rootScene.addChild(this);
     }
 });
@@ -117,14 +116,26 @@ window.onload = function() {
             var y = -1;
             var enemy1 = new Enemy(x,y);
             enemy1.frame = 7;
-        /*
-        enemy1.addEventListener(Event.ENTER_FRAME, function(){
-        // ブロックとの当たり判定
-            if (enemy1.intersect(player)){
-            console.log = "push";
-            }; 
-        });
-        */
+        enemy1.addEventListener('enterframe', function(e) {
+                if(this.intersect(player)){
+                    score = 0;
+                }
+                this.xx = this.x;
+                this.yy = this.y;
+                if(this.direction == 0){this.yy = this.y+enemy_spd;}
+                if(this.direction == 1){this.xx = this.x-enemy_spd;}
+                if(this.direction == 2){this.xx = this.x+enemy_spd;}
+                if(this.direction == 3){this.yy = this.y-enemy_spd;}
+                if(!map.hitTest(this.xx+1,this.yy+1)&&!map.hitTest(this.xx+14,this.yy+14)){
+                    this.x = this.xx;
+                    this.y = this.yy;
+                }else{
+                    this.direction = (this.direction + Math.floor(Math.random()*3))%4;
+                }
+            });
+            return enemy1;
+       
+        
             var x = 264;
             var y = 255;
             var enemy2 = new Enemy(x,y);
